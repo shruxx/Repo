@@ -5,20 +5,25 @@ import javax.swing.WindowConstants as WC
 
 def eingabefeld = new JTextField()
 def gui = new SwingBuilder()
+def newFile = new File("")
+def folder = new JFileChooser()
 
-gui.edt {
-    frame(title: 'Einkaufsliste', defaultCloseOperation: JFrame.EXIT_ON_CLOSE, pack: true, show: true)
-            {
-                vbox {
-                    textlabel = label('Was benötigst du?')
-                    hbox{
-                        input = textField(columns:20, actionPerformed: {echo.text = input.text.toUpperCase()})
-                        //HIER MUSS NOCH GANZ VIEL STEHEN
 
-                     hbox{
-                         button(text:'Mitteilen', actionPerformed: {println input.text})
-                     }
+
+    gui.edt {
+        frame(title: 'Einkaufsliste', defaultCloseOperation: JFrame.EXIT_ON_CLOSE, pack: true, show: true)
+                {
+                    vbox {
+                        textlabel = label('Was benötigst du?')
+                        hbox {
+                            input = textField(columns: 20, actionPerformed: { echo.text = input.text.toUpperCase() })
+                            //HIER MUSS NOCH GANZ VIEL STEHEN
+
+                            hbox {
+                                button(text: 'Mitteilen', actionPerformed: {println(input.text); folder.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY)
+                                folder.showOpenDialog(null)})
+                            }
+                        }
                     }
                 }
-            }
-}
+    }
