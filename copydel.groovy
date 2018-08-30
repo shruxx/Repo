@@ -4,7 +4,6 @@ def antdel = new AntBuilder()
     ant.sequential{
              echo("wir sind mittendrin!")
              def Posteingang="C:/Coding/Test/"
-             mkdir(dir: Posteingang)
              copy(todir: Posteingang) {
                  fileset(dir:"C:/Coding/Quelle/")
                     }
