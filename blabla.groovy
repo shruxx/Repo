@@ -36,6 +36,11 @@ gui.edt {
                                 sql.executeInsert"""INSERT INTO Einkaufsliste (Ware) VALUES (${input.text})"""
                                 println "${input.text} wurde vermerkt!"
                             })
+                        hbox{
+                            button(text: 'Einkaufsliste resetten', actionPerformed: {
+                                sql.execute "DELETE"
+                            })
+                        }
                         }
                     }
                 }
