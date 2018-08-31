@@ -38,7 +38,8 @@ gui.edt {
                             })
                         hbox{
                             button(text: 'Einkaufsliste resetten', actionPerformed: {
-                                sql.execute "DELETE"
+                                sql.execute "DELETE FROM Einkaufsliste"
+                                println "Einkaufsliste wurde resetted"
                             })
                         }
                         }
