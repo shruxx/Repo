@@ -38,12 +38,20 @@ gui.edt {
                             })
                         hbox{
                             button(text: 'Einkaufsliste resetten', actionPerformed: {
-                                sql.execute "DELETE FROM Einkaufsliste"
-                                println "Einkaufsliste wurde resetted"
-                            })
+                                frame(title: 'Einkaufsliste', defaultCloseOperation: JFrame.EXIT_ON_CLOSE, pack: true, show: true){
+                               hbox {
+                                    textlabel = label ('Bist du dir wirklich sicher?')
+                                    button(text:'Aber sicher doch', actionPerformed: {
+                                        sql.execute "DELETE FROM Einkaufsliste"
+                                        println "Einkaufsliste wurde resetted"
+                                    })
+                                    button(text:'Nein, lass mal sein', actionPerformed: {gui.dispose()})}}
+
+                                })
+
+                            }
                         }
                         }
                     }
                 }
             }
-}
