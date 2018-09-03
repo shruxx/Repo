@@ -20,38 +20,41 @@ gui.edt {
                 vbox {
                     textlabel = label('Was benötigst du?')
                     hbox {
-                        input = textField(columns: 50, actionPerformed: { echo.text = input.text.toUpperCase()})
+                        input = textField(columns: 30, actionPerformed: { echo.text = input.text.toUpperCase()})
+
 
                         //HIER MUSS NOCH GANZ VIEL STEHEN
                     }
                     hbox {
                         button(text: 'zeige mir die List an', actionPerformed: {
                             (sql.eachRow("SELECT * FROM Einkaufsliste") {
-                               println "${it.Ware}"
+                                println "${it.Ware}"
                             })
                         })
 
                         hbox {
                             button(text: 'Mitteilen', actionPerformed: {
+                                println input.text.length()
+                                if (input.text.length() < 50){println "toll!"} else { throw new Exception("Zu viele Zeichen eingegeben!")}
                                 sql.executeInsert"""INSERT INTO Einkaufsliste (Ware) VALUES (${input.text})"""
                                 println "${input.text} wurde vermerkt!"
                             })
-                        hbox{
-                            button(text: 'Einkaufsliste resetten', actionPerformed: {
-                                frame(title: 'Einkaufsliste', defaultCloseOperation: JFrame.EXIT_ON_CLOSE, pack: true, show: true){
-                               hbox {
-                                    textlabel = label ('Bist du dir wirklich sicher?')
-                                    button(text:'Aber sicher doch', actionPerformed: {
-                                        sql.execute "DELETE FROM Einkaufsliste"
-                                        println "Einkaufsliste wurde resetted"
-                                    })
-                                    button(text:'Nein, lass mal sein', actionPerformed: {gui.dispose()})}}
+                            hbox{
+                                button(text: 'Einkaufsliste resetten', actionPerformed: {
+                                    frame(title: 'Einkaufsliste', defaultCloseOperation: JFrame.EXIT_ON_CLOSE, pack: true, show: true){
+                                        hbox {
+                                            textlabel = label ('Bist du dir wirklich sicher?')
+                                            button(text:'Aber sicher doch', actionPerformed: {
+                                                sql.execute "DELETE FROM Einkaufsliste"
+                                                println "Einkaufsliste wurde resetted"
+                                            })
+                                            button(text:'Nein, lass mal sein', actionPerformed: {gui.dispose()})}}
 
                                 })
 
                             }
                         }
-                        }
                     }
                 }
             }
+}
