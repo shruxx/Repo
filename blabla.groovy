@@ -1,9 +1,9 @@
 import groovy.sql.Sql
 import groovy.swing.SwingBuilder
 import groovyx.gpars.dataflow.Select
-
 import javax.swing.*
 import java.awt.*
+import javafx.scene.layout.VBox
 import javax.swing.WindowConstants as WC
 import java.awt.event.ActionEvent
 import java.text.DecimalFormat
@@ -15,12 +15,13 @@ def eingabefeld = new JTextField()
 def driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver"
 def sql = Sql.newInstance(db, user, password, driver)
 def gui = new SwingBuilder()
+//label = new JLabel()
 
 gui.edt{
-    frame(title: 'Einkaufsliste', defaultLookAndFeelDecorated: BorderLayout, defaultCloseOperation: JFrame.EXIT_ON_CLOSE, pack: true, show: true)
+ frame(title: 'Einkaufsliste', defaultCloseOperation: JFrame.EXIT_ON_CLOSE, pack: true, show: true)
             {
                 vbox {
-                    textlabel = label('Was benötigst du?')
+                    textlabel = label("Was benötigst du?")
                     hbox {
                         input = textField(columns: 30, actionPerformed: { echo.text = input.text.toUpperCase()})
 
@@ -89,4 +90,4 @@ gui.edt{
                         }
                     }
                 }
-            }
+}
