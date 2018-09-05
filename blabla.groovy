@@ -2,7 +2,6 @@ import groovy.sql.Sql
 import groovy.swing.SwingBuilder
 import groovyx.gpars.dataflow.Select
 import javax.swing.*
-import java.util.regex.*
 import java.awt.*
 import javafx.scene.layout.VBox
 import javax.swing.WindowConstants as WC
@@ -32,6 +31,7 @@ gui.edt {
                         button(text: 'zeige mir die Liste an', actionPerformed: {
                             (sql.eachRow("SELECT * FROM Einkaufsliste") {
                                 println "${it.Ware}"
+                                JOptionPane.showMessageDialog(null, "${it.Ware}", "Einkaufliste komplett", JOptionPane.PLAIN_MESSAGE)
                             })
                         })
 
