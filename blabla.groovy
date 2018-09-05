@@ -38,9 +38,9 @@ gui.edt{
                         hbox {
                             button(text: 'Mitteilen', actionPerformed: {
                                 println input.text.length()
-                                if(input.text.length() > 50) {throw new Exception("Zu viele Zeichen eingegeben!")}
+                                if(input.text.length() > 50) {throw new Exception("zu wenig Zeichen!", JOptionPane.showMessageDialog(null, "Zu viele Zeichen angegeben!", "ERROR", JOptionPane.ERROR_MESSAGE))}
                                 else { println"Alles super hier"}
-                                if(input.text.length().equals(0) ) {throw new Exception("Zu wenig Zeichen angegeben!")}
+                                if(input.text.length().equals(0) ) {throw new Exception("zu wenig Zeichen!", JOptionPane.showMessageDialog(null, "Zu wenig Zeichen angegeben!", "ERROR", JOptionPane.ERROR_MESSAGE))}
                                 else { println "alles super hier!"}
                                 //sql.executeInsert"""INSERT INTO Einkaufsliste (Ware) VALUES (${input.text})"""
                                 println "${input.text} wurde vermerkt!"
@@ -49,20 +49,22 @@ gui.edt{
                                         inputP = textField(columns: 30, actionPerformed: { echo.text = inputP.text.toUpperCase()})
                                             textlabelP = label("Was kostet ${input.text}?")
                                                     button(text:"Mitteilen", actionPerformed: {
-                                                        if(inputP.text.length().equals(0) ) {throw new Exception("Zu wenig Zeichen angegeben!")}
+                                                        if(inputP.text.length().equals(0) ) {throw new Exception("zu wenig Zeichen!", JOptionPane.showMessageDialog(null, "Zu wenig Zeichen angegeben!", "ERROR", JOptionPane.ERROR_MESSAGE))}
                                                         else { println "alles super hier!"}
+                                                        String o = "${inputP.text}"
+                                                        def y = o as Double
                                                         //sql.executeInsert"""INSERT INTO Einkaufsliste (Preis, Ware) VALUES (${inputP.text},${input.text})"""
                                                         println "${inputP.text} wurde vermerkt"
-                                                        frame(title: 'Menge', defaultCloseOperation: JFrame.EXIT_ON_CLOSE, pack: true, show: true){
+                                                        frame(title: 'Menge', defaultCloseOperation: JFrame.DISPOSE_ON_CLOSE, pack: true, show: true){
                                                             hbox {
                                                                 inputM = textField(columns: 30, actionPerformed: { echo.text = inputM.text.toUpperCase()})
-                                                                textlabelM = label ("Wieviel hättest du gerne von (${input.text})?")
+                                                                textlabelM = label ("Wieviel hättest du gerne von ${input.text}?")
                                                                 button(text:"Mitteilen", actionPerformed: {
-                                                                    if(inputM.text.length().equals(0) ) {throw new Exception("Zu wenig Zeichen angegeben!")}
+                                                                    if(inputM.text.length().equals(0) ) {throw new Exception("zu wenig Zeichen!", JOptionPane.showMessageDialog(null, "Zu wenig Zeichen angegeben!", "ERROR", JOptionPane.ERROR_MESSAGE))}
                                                                     else { println "alles super hier!"}
                                                                     String m = "${inputM.text}"
                                                                     def z = m as Double
-                                                                    sql.executeInsert"""INSERT INTO Einkaufsliste (Menge, Preis, Ware) VALUES(${z}, ${inputP.text}, ${input.text})"""
+                                                                    sql.executeInsert"""INSERT INTO Einkaufsliste (Menge, Preis, Ware) VALUES(${z}, ${y}, ${input.text})"""
                                                                     println "${inputM.text} wurde vermerkt"
                                                                                                                                     })
                                                                 button(text:"Schliessen", actionPerformed: {gui.dispose()})
