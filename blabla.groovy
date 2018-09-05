@@ -2,6 +2,7 @@ import groovy.sql.Sql
 import groovy.swing.SwingBuilder
 import groovyx.gpars.dataflow.Select
 import javax.swing.*
+import java.util.regex.*
 import java.awt.*
 import javafx.scene.layout.VBox
 import javax.swing.WindowConstants as WC
@@ -17,14 +18,13 @@ def sql = Sql.newInstance(db, user, password, driver)
 def gui = new SwingBuilder()
 //label = new JLabel()
 
-gui.edt{
- frame(title: 'Einkaufsliste', defaultCloseOperation: JFrame.EXIT_ON_CLOSE, pack: true, show: true)
+gui.edt {
+    frame(title: 'Einkaufsliste', defaultCloseOperation: JFrame.EXIT_ON_CLOSE, pack: true, show: true)
             {
                 vbox {
                     textlabel = label("Was benötigst du?")
                     hbox {
-                        input = textField(columns: 30, actionPerformed: { echo.text = input.text.toUpperCase()})
-
+                        input = textField(columns: 30, actionPerformed: { echo.text = input.text.toUpperCase() })
 
                         //HIER MUSS NOCH GANZ VIEL STEHEN
                     }
@@ -38,18 +38,25 @@ gui.edt{
                         hbox {
                             button(text: 'Mitteilen', actionPerformed: {
                                 println input.text.length()
-                                if(input.text.length() > 50) {throw new Exception("zu wenig Zeichen!", JOptionPane.showMessageDialog(null, "Zu viele Zeichen angegeben!", "ERROR", JOptionPane.ERROR_MESSAGE))}
-                                else { println"Alles super hier"}
-                                if(input.text.length().equals(0) ) {throw new Exception("zu wenig Zeichen!", JOptionPane.showMessageDialog(null, "Zu wenig Zeichen angegeben!", "ERROR", JOptionPane.ERROR_MESSAGE))}
-                                else { println "alles super hier!"}
+                                if (input.text.length() > 50) {
+                                    throw new Exception("zu wenig Zeichen!", JOptionPane.showMessageDialog(null, "Zu viele Zeichen angegeben!", "ERROR", JOptionPane.ERROR_MESSAGE))
+                                } else {
+                                    println "Alles super hier"
+                                }
+                                if (input.text.length().equals(0)) {
+                                    throw new Exception("zu wenig Zeichen!", JOptionPane.showMessageDialog(null, "Zu wenig Zeichen angegeben!", "ERROR", JOptionPane.ERROR_MESSAGE))
+                                } else {
+                                    println "alles super hier!"
+                                }
                                 //sql.executeInsert"""INSERT INTO Einkaufsliste (Ware) VALUES (${input.text})"""
                                 println "${input.text} wurde vermerkt!"
-                                frame(title: 'Preis', defaultCloseOperation: JFrame.DISPOSE_ON_CLOSE, pack: true, show: true){
+                                frame(title: 'Preis', defaultCloseOperation: JFrame.DISPOSE_ON_CLOSE, pack: true, show: true) {
                                     hbox {
                                         inputP = textField(columns: 30, actionPerformed: { echo.text = inputP.text.toUpperCase()})
                                             textlabelP = label("Was kostet ${input.text}?")
                                                     button(text:"Mitteilen", actionPerformed: {
                                                         if(inputP.text.length().equals(0) ) {throw new Exception("zu wenig Zeichen!", JOptionPane.showMessageDialog(null, "Zu wenig Zeichen angegeben!", "ERROR", JOptionPane.ERROR_MESSAGE))}
+                                                            else if (inputP.text.matches(".*[a-zA-Z]+.*")) {throw new Exception("Eingabe enthält Buchstaben. Erneut eingeben!", JOptionPane.showMessageDialog(null, "Eingabe enthält Buchstaben. Erneut eingeben!", "ERROR", JOptionPane.ERROR_MESSAGE))}
                                                         else { println "alles super hier!"}
                                                         String o = "${inputP.text}"
                                                         def y = o as Double
@@ -61,6 +68,7 @@ gui.edt{
                                                                 textlabelM = label ("Wieviel hättest du gerne von ${input.text}?")
                                                                 button(text:"Mitteilen", actionPerformed: {
                                                                     if(inputM.text.length().equals(0) ) {throw new Exception("zu wenig Zeichen!", JOptionPane.showMessageDialog(null, "Zu wenig Zeichen angegeben!", "ERROR", JOptionPane.ERROR_MESSAGE))}
+                                                                        else if (inputM.text.matches(".*[a-zA-Z]+.*")) {throw new Exception("Eingabe enthält Buchstaben. Erneut eingeben!", JOptionPane.showMessageDialog(null, "Eingabe enthält Buchstaben. Erneut eingeben!", "ERROR", JOptionPane.ERROR_MESSAGE))}
                                                                     else { println "alles super hier!"}
                                                                     String m = "${inputM.text}"
                                                                     def z = m as Double
@@ -77,14 +85,16 @@ gui.edt{
                             }
                             hbox{
                                 button(text: 'Einkaufsliste resetten', actionPerformed: {
-                                    frame(title: 'Einkaufsliste', defaultCloseOperation: JFrame.DISPOSE_ON_CLOSE, pack: true, show: true){
+                                    frame(title: 'Einkaufsliste', defaultCloseOperation: JFrame.DISPOSE_ON_CLOSE, pack: true, show: true) {
                                         hbox {
-                                            textlabel = label ('Bist du dir wirklich sicher?')
-                                            button(text:'Aber sicher doch', actionPerformed: {
+                                            textlabel = label('Bist du dir wirklich sicher?')
+                                            button(text: 'Aber sicher doch', actionPerformed: {
                                                 sql.execute "DELETE FROM Einkaufsliste"
                                                 println "Einkaufsliste wurde resetted"
                                             })
-                                            button(text:'Nein, lass mal sein', actionPerformed: {gui.dispose()})}}
+                                            button(text: 'Nein, lass mal sein', actionPerformed: { gui.dispose() })
+                                        }
+                                    }
 
                                 })
 
@@ -92,4 +102,4 @@ gui.edt{
                         }
                     }
                 }
-}
+            }
